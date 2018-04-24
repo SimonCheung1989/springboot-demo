@@ -1,0 +1,60 @@
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: login-service
+  description: description
+  termsOfService: terms
+  contact:
+    name: Simon
+    url: https://github.com/SimonCheung1989
+    email: 243120877@qq.com
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: localhost:8080
+basePath: /login-service
+tags:
+- name: Login
+schemes:
+- http
+paths:
+  /login:
+    post:
+      tags:
+      - Login
+      summary: login
+      description: login
+      parameters:
+      - name: LoginDTO
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LoginDTO'
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/ProfileDTO'
+          description: OK
+definitions:
+  ProfileDTO:
+    type: object
+    properties:
+      name:
+        type: string
+      gender:
+        type: string
+      age:
+        type: integer
+      id:
+        type: string
+      loginName:
+        type: string
+      password:
+        type: string
+  LoginDTO:
+    type: object
+    properties:
+      loginName:
+        type: string
+      password:
+        type: string

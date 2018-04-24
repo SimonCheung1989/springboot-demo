@@ -1,0 +1,81 @@
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: profile-service
+  description: description
+  termsOfService: terms
+  contact:
+    name: Simon
+    url: https://github.com/SimonCheung1989
+    email: 243120877@qq.com
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+host: localhost:8080
+basePath: /profile-service
+tags:
+- name: Profile
+schemes:
+- http
+paths:
+  /profile:
+    get:
+      tags:
+      - Profile
+      summary: get profile
+      description: get profile
+      responses:
+        200:
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ProfileDTO'
+          description: OK
+    post:
+      tags:
+      - Profile
+      summary: post profile
+      description: post profile
+      parameters:
+      - name: ProfileDTO
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ProfileDTO'
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/ProfileDTO'
+          description: OK
+  /profile/{id}:
+    get:
+      tags:
+      - Profile
+      summary: get profile by id
+      description: get profile by id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/ProfileDTO'
+          description: OK
+definitions:
+  ProfileDTO:
+    type: object
+    properties:
+      name:
+        type: string
+      gender:
+        type: string
+      age:
+        type: integer
+      id:
+        type: string
+      loginName:
+        type: string
+      password:
+        type: string
