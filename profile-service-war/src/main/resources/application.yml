@@ -1,0 +1,16 @@
+server:
+  port: 18090
+spring:
+  datasource:
+    jndi-name: java:comp/env/jdbc/profile-db
+#    url: jdbc:mysql://127.0.0.1:3306/profile_schema?useSSL=false
+#    username: profile_dba
+#    password: password
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
