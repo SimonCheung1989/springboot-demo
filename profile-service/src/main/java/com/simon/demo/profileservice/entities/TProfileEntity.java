@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "T_PROFILE", schema = "PUBLIC", catalog = "PROFILE-SERVICE")
+@Table(name = "T_PROFILE")
 public class TProfileEntity {
     private String id;
     private String name;

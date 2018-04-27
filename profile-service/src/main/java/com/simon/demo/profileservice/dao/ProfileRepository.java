@@ -1,8 +1,11 @@
 package com.simon.demo.profileservice.dao;
 
 import com.simon.demo.profileservice.entities.TProfileEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.*;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-
-public interface ProfileRepository extends Repository<TProfileEntity, String> {
+@Repository
+public interface ProfileRepository extends JpaRepository<TProfileEntity, String> {
 }
