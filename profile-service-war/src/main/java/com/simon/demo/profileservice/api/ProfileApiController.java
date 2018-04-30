@@ -62,4 +62,12 @@ public class ProfileApiController {
         return new ResponseEntity(profileDTO, HttpStatus.NOT_IMPLEMENTED);
     }
 
+    @Autowired
+    private String tomcatAppName;
+
+    @RequestMapping(value = "/getTomcatAppName", method = RequestMethod.GET)
+    public ResponseEntity<String> getTomcatAppName(){
+        return new ResponseEntity<>(tomcatAppName, HttpStatus.OK);
+    }
+
 }

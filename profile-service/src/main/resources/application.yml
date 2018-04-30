@@ -1,6 +1,8 @@
 server:
   port: 18090
 spring:
+  application:
+    name: profile-service
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/profile_schema?useSSL=false
     username: profile_dba
@@ -13,3 +15,7 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:18000/eureka/
