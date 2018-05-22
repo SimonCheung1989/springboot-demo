@@ -1,5 +1,7 @@
 server:
   port: 18090
+  servlet:
+    context-path: /profile-service-war
 spring:
   jpa:
     database: mysql

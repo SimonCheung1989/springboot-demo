@@ -1,5 +1,7 @@
 server:
   port: 18090
+  servlet:
+    context-path: /profile-service
 spring:
   application:
     name: profile-service
@@ -19,3 +21,6 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:18000/eureka/
+
+env:
+  username: Simon
