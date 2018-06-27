@@ -1,5 +1,6 @@
 package com.simon.demo.profileservice;
 
+import com.simon.demo.profileservice.kafka.Consumer;
 import com.simon.demo.profileservice.kafka.Producer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +15,12 @@ public class KafkaTest {
     @Autowired
     private Producer producer;
 
+    @Autowired
+    private Consumer consumer;
+
     @Test
     public void testProducer(){
         producer.send("test", "helllo11111");
     }
+
 }
