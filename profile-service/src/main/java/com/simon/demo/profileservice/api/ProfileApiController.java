@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class ProfileApiController {
@@ -27,6 +25,13 @@ public class ProfileApiController {
 
     @Autowired
     private ProfileRepository profileRepository;
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public Map<String, String> test(){
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("methodName", "test");
+        return map;
+    }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ResponseEntity<List<ProfileDTO>> profileGet() {
