@@ -6,7 +6,7 @@ spring:
   application:
     name: profile-service
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/profile_schema?useSSL=false
+    url: jdbc:mysql://116.23.229.223:3306/profile_schema?useSSL=false
     username: profile_dba
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
