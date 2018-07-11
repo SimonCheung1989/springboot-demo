@@ -6,9 +6,9 @@ spring:
   application:
     name: profile-service
   datasource:
-    url: jdbc:mysql://116.23.229.223:3306/profile_schema?useSSL=false
-    username: profile_dba
-    password: password
+    url: jdbc:mysql://219.136.163.248:3306/profile_schema?useSSL=false
+    username: root
+    password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -17,19 +17,19 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
-kafka:
-  bootstrap-servers: 192.168.99.109:9092
-  topic:
-    testtopic: test
-  consumer:
-    group-id: springboot-group1
-    auto-offset-reset: earliest
-
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:18000/eureka/
+#kafka:
+#  bootstrap-servers: 192.168.99.109:9092
+#  topic:
+#    testtopic: test
+#  consumer:
+#    group-id: springboot-group1
+#    auto-offset-reset: earliest
+#
+#
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:18000/eureka/
 
 env:
   username: Simon
