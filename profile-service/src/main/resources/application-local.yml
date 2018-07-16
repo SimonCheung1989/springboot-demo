@@ -1,0 +1,42 @@
+server:
+  port: 18090
+  servlet:
+    context-path: /profile-service
+spring:
+  application:
+    name: profile-service
+#  datasource:
+#    url: jdbc:mysql://127.0.0.1:3306/profile_schema?useSSL=false
+#    username: profile_dba
+#    password: password
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+  datasource:
+    url: jdbc:h2:file:~/.h2/profile_schema
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+    schema: classpath:data/schema.sql
+#    data: classpath:db/data.sql
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+#kafka:
+#  bootstrap-servers: 192.168.99.109:9092
+#  topic:
+#    testtopic: test
+#  consumer:
+#    group-id: springboot-group1
+#    auto-offset-reset: earliest
+#
+#
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:18000/eureka/
+
+env:
+  username: Simon

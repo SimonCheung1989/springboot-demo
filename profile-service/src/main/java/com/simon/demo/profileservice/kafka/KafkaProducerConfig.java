@@ -13,7 +13,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@Profile("!docker")
+@Profile("prod")
 @Configuration
 public class KafkaProducerConfig {
     @Value("${kafka.bootstrap-servers}")

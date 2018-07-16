@@ -14,7 +14,7 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@Profile("!docker")
+@Profile("prod")
 @Configuration
 @EnableKafka
 public class KafkaConsumerConfig {

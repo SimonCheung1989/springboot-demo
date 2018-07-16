@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-@Profile("!docker")
+@Profile("prod")
 @Component
 public class Producer {
     @Autowired

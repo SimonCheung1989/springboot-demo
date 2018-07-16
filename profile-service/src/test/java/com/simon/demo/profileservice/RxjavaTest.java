@@ -2,14 +2,7 @@ package com.simon.demo.profileservice;
 
 import io.reactivex.Flowable;
 import org.junit.Test;
-import rx.Observable;
-import rx.Scheduler;
-import rx.Single;
-import rx.Subscriber;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -32,133 +25,133 @@ public class RxjavaTest {
             System.out.println(i);
         }
     }
-
-    @Test
-    public void testObservable() {
-        Observable.just("Hello world").subscribe(System.out::println);
-
-        Observable observable = Observable.create((subscriber) -> {
-            try {
-                Thread.sleep(10000);
-            } catch (Exception e) {
-
-            }
-            subscriber.onNext("Hello world");
-
-            subscriber.onCompleted();
-        });
-
-        observable.subscribe(System.out::println);
-        System.out.println("end");
-    }
-
-    @Test
-    public void testSingle() {
-        System.out.println(Thread.currentThread());
-
-        Single.just("Hello").subscribe(x -> {
-            System.out.println(Thread.currentThread() + ":" + x);
-        });
-        Scheduler scheduler = Schedulers.computation();
-        Scheduler.Worker worker  = scheduler.createWorker();
-
-        Action0 innerAction = () -> {
-            try {
-                Thread.sleep(1000);
-            }catch (Exception e){
-
-            }
-            System.out.println(Thread.currentThread() + ":" + "innerAction");
-        };
-
-        Action0 outerAction = () -> {
-            try {
-                Thread.sleep(1000);
-            }catch (Exception e){
-
-            }
-            System.out.println(Thread.currentThread() + ":" + "outerAction");
-            worker.schedule(innerAction);
-        };
-
-        worker.schedule(outerAction);
-
-        Single.just("Hello world").subscribeOn(scheduler).subscribe(x -> {
-            System.out.println(Thread.currentThread() + ":" + x);
-        });
-
-
-        while (true);
-    }
-
-    @Test
-    public void testObservableFrom() {
-        List<String> list = new ArrayList();
-        list.add("Item 1");
-        list.add("Item 2");
-        list.add("Item 3");
-
-        Observable.from(list).subscribe(x -> {
-            System.out.println(x);
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-
-            }
-        });
-    }
-
-    @Test
-    public void testObservableDefer() {
-//        Observable.defer()
-    }
-
-    @Test
-    public void testObservableInterval() {
-        Observable observable = Observable.interval(10, TimeUnit.SECONDS);
-
-        observable.subscribe(x -> {
-            System.out.println("x:" + x);
-        });
-
-    }
-
-    @Test
-    public void testObservableRange() {
-        Observable observable = Observable.range(10, 5);
-        observable.subscribe(x -> {
-            System.out.println(x);
-        });
-    }
-
-    @Test
-    public void testObservableTimer() {
-        Observable observable = Observable.timer(3, TimeUnit.SECONDS);
-        observable.subscribe(x -> {
-            System.out.println("----");
-        });
-    }
-
-    @Test
-    public void testObservableRepeat() {
-        Observable observable = Observable.just("Item").repeat(5);
-        observable.subscribe(x -> {
-            System.out.println(x);
-        });
-    }
-
-    @Test
-    public void testObservableMap() {
-        Observable observable = Observable.just("10");
-        observable.map(new Func1<String, Integer>() {
-            @Override
-            public Integer call(String o) {
-                return Integer.parseInt(o) + 1;
-            }
-        }).subscribe(x -> {
-            System.out.println(x);
-        });
-    }
+//
+//    @Test
+//    public void testObservable() {
+//        Observable.just("Hello world").subscribe(System.out::println);
+//
+//        Observable observable = Observable.create((subscriber) -> {
+//            try {
+//                Thread.sleep(10000);
+//            } catch (Exception e) {
+//
+//            }
+//            subscriber.onNext("Hello world");
+//
+//            subscriber.onCompleted();
+//        });
+//
+//        observable.subscribe(System.out::println);
+//        System.out.println("end");
+//    }
+//
+//    @Test
+//    public void testSingle() {
+//        System.out.println(Thread.currentThread());
+//
+//        Single.just("Hello").subscribe(x -> {
+//            System.out.println(Thread.currentThread() + ":" + x);
+//        });
+//        Scheduler scheduler = Schedulers.computation();
+//        Scheduler.Worker worker  = scheduler.createWorker();
+//
+//        Action0 innerAction = () -> {
+//            try {
+//                Thread.sleep(1000);
+//            }catch (Exception e){
+//
+//            }
+//            System.out.println(Thread.currentThread() + ":" + "innerAction");
+//        };
+//
+//        Action0 outerAction = () -> {
+//            try {
+//                Thread.sleep(1000);
+//            }catch (Exception e){
+//
+//            }
+//            System.out.println(Thread.currentThread() + ":" + "outerAction");
+//            worker.schedule(innerAction);
+//        };
+//
+//        worker.schedule(outerAction);
+//
+//        Single.just("Hello world").subscribeOn(scheduler).subscribe(x -> {
+//            System.out.println(Thread.currentThread() + ":" + x);
+//        });
+//
+//
+//        while (true);
+//    }
+//
+//    @Test
+//    public void testObservableFrom() {
+//        List<String> list = new ArrayList();
+//        list.add("Item 1");
+//        list.add("Item 2");
+//        list.add("Item 3");
+//
+//        Observable.from(list).subscribe(x -> {
+//            System.out.println(x);
+//            try {
+//                Thread.sleep(1000);
+//            } catch (Exception e) {
+//
+//            }
+//        });
+//    }
+//
+//    @Test
+//    public void testObservableDefer() {
+////        Observable.defer()
+//    }
+//
+//    @Test
+//    public void testObservableInterval() {
+//        Observable observable = Observable.interval(10, TimeUnit.SECONDS);
+//
+//        observable.subscribe(x -> {
+//            System.out.println("x:" + x);
+//        });
+//
+//    }
+//
+//    @Test
+//    public void testObservableRange() {
+//        Observable observable = Observable.range(10, 5);
+//        observable.subscribe(x -> {
+//            System.out.println(x);
+//        });
+//    }
+//
+//    @Test
+//    public void testObservableTimer() {
+//        Observable observable = Observable.timer(3, TimeUnit.SECONDS);
+//        observable.subscribe(x -> {
+//            System.out.println("----");
+//        });
+//    }
+//
+//    @Test
+//    public void testObservableRepeat() {
+//        Observable observable = Observable.just("Item").repeat(5);
+//        observable.subscribe(x -> {
+//            System.out.println(x);
+//        });
+//    }
+//
+//    @Test
+//    public void testObservableMap() {
+//        Observable observable = Observable.just("10");
+//        observable.map(new Func1<String, Integer>() {
+//            @Override
+//            public Integer call(String o) {
+//                return Integer.parseInt(o) + 1;
+//            }
+//        }).subscribe(x -> {
+//            System.out.println(x);
+//        });
+//    }
 
     @Test
     public void testOptional(){
