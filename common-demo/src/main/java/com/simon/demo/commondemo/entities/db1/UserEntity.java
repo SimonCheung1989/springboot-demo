@@ -1,4 +1,4 @@
-package com.simon.demo.commondemo.entities;
+package com.simon.demo.commondemo.entities.db1;
 
 import javax.persistence.*;
 

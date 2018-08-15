@@ -1,13 +1,14 @@
 package com.simon.demo.commondemo;
 
 import com.simon.demo.commondemo.component.ServiceA;
-import com.simon.demo.commondemo.dao.UserDao;
-import com.simon.demo.commondemo.entities.UserEntity;
+import com.simon.demo.commondemo.dao.db1.UserDao;
+import com.simon.demo.commondemo.dao.db2.BlogDao;
+import com.simon.demo.commondemo.entities.db2.BlogEntity;
+import com.simon.demo.commondemo.entities.db1.UserEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -18,6 +19,9 @@ public class CommonDemoApplicationTests {
 
 	@Autowired
 	UserDao userDao;
+
+	@Autowired
+	BlogDao blogDao;
 
 	@Test
 	public void contextLoads() {
@@ -30,6 +34,13 @@ public class CommonDemoApplicationTests {
 //		userEntity.setId(1);
 		userEntity.setName("Simon");
 		userDao.save(userEntity);
+	}
+
+	@Test
+	public void testBlog() {
+		BlogEntity blogEntity = new BlogEntity();
+		blogEntity.setTitle("This is title");
+		blogDao.save(blogEntity);
 	}
 
 }
