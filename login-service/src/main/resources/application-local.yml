@@ -7,6 +7,15 @@ spring:
   application:
     name: login-service
 
+feign:
+  client:
+    config:
+      feignName:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
+
+
 #eureka:
 #  client:
 #    serviceUrl:
