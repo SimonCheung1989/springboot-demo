@@ -39,7 +39,7 @@ public class DB1Config {
         return builder
                 .dataSource(dataSource)
                 .packages("com.simon.demo.commondemo.entities.db1")
-//                .persistenceUnit("UserEntity")
+                .persistenceUnit("UserEntity")
                 .build();
     }
 

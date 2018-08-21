@@ -1,0 +1,13 @@
+server:
+  port: 18080
+  servlet:
+    context-path: /login-service
+
+spring:
+  application:
+    name: login-service
+
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:18000/eureka/
