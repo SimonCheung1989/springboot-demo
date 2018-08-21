@@ -25,7 +25,7 @@ public class LoginService {
 
     @Retryable(maxAttempts = 3, backoff = @Backoff(delay = 1000l, multiplier = 1))
     public ProfileDTO login(LoginDTO loginDTO) {
-        System.out.println("Retry");
+        log.debug("Retry");
 
         return restTemplate.getForObject("http://localhost:18090/profile-service/profile/" + loginDTO.getLoginName(), ProfileDTO.class);
     }
