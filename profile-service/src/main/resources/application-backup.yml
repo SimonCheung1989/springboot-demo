@@ -1,5 +1,5 @@
 server:
-  port: 18090
+  port: 18091
   servlet:
     context-path: /profile-service
 spring:
@@ -11,7 +11,7 @@ spring:
 #    password: password
 #    driver-class-name: com.mysql.cj.jdbc.Driver
   datasource:
-    url: jdbc:h2:file:~/.h2/profile_schema
+    url: jdbc:h2:file:~/.h2/profile_schema_backup
     driverClassName: org.h2.Driver
     username: sa
     password:

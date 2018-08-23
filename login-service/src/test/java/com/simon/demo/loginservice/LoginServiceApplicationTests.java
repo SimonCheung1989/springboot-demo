@@ -13,4 +13,19 @@ public class LoginServiceApplicationTests {
 	public void contextLoads() {
 	}
 
+	@Test(expected = NullPointerException.class)
+	public void testExpection() {
+		try {
+			String str = null;
+			System.out.println(str.toString());
+		} catch (NullPointerException e) {
+			System.out.println("NullPointerException");
+			throw e;
+		} catch (Exception e) {
+			System.out.println("Exception");
+		} finally {
+			System.out.println("Finally");
+		}
+	}
+
 }
