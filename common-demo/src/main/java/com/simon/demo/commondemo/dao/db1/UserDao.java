@@ -14,4 +14,8 @@ public interface UserDao extends JpaRepository<UserEntity, Integer> {
     @Query(value = "select * from T_USER where NAME like :name% order by NAME limit :offset, :limit",
             nativeQuery = true)
     List<UserEntity> findByName(@Param("name") String name, @Param("offset") Integer offset, @Param("limit") Integer limit);
+
+    @Query(value = "select count(*) from T_USER where NAME like :name%",
+            nativeQuery = true)
+    Long countByName(@Param("name") String name);
 }

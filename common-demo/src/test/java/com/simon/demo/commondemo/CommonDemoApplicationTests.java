@@ -60,4 +60,31 @@ public class CommonDemoApplicationTests {
 		});
 	}
 
+	@Test
+	public void testCoundByName() {
+		long total = userDao.countByName("Simon");
+		System.out.println(total);
+	}
+
+	@Test
+	public void testTransactional() {
+		UserEntity userEntity =  new UserEntity();
+		userEntity.setName("Transactional4");
+		BlogEntity blogEntity = new BlogEntity();
+		blogEntity.setTitle("Transactional4");
+
+		this.serviceA.insert(userEntity, blogEntity);
+	}
+
+	@Test
+	public void testManualTransactional() {
+		UserEntity userEntity =  new UserEntity();
+		userEntity.setName("Transactional6");
+		BlogEntity blogEntity = new BlogEntity();
+		blogEntity.setTitle("Transactional6");
+
+		this.serviceA.insertWithManualTransactional(userEntity, blogEntity);
+	}
+
+
 }
