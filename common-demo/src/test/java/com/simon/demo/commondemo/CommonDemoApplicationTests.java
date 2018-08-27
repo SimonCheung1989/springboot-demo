@@ -86,5 +86,32 @@ public class CommonDemoApplicationTests {
 		this.serviceA.insertWithManualTransactional(userEntity, blogEntity);
 	}
 
+	@Test
+	public void testTransfer(){
+		UserEntity user1 =  this.userDao.findById(1).get();
+		UserEntity user2 =  this.userDao.findById(2).get();
+		System.out.println(user1.getName());
+		System.out.println(user2.getName());
+
+		for(int i=0; i<10000; i++) {
+			Thread thread = new Thread(() -> {
+				serviceA.transfer(user1, user2);
+				serviceA.transfer(user2, user1);
+				System.out.println("User1.score=" + user1.getScore() +", Total=" + (user1.getScore() + user2.getScore()));
+			});
+			thread.start();
+		}
+
+//		for(int i=0; i<10000; i++) {
+//			Thread thread = new Thread(() -> {
+//				serviceA.transfer(user2, user1);
+//				System.out.println("User1.score=" + user1.getScore() +", Total=" + (user1.getScore() + user2.getScore()));
+//			});
+//			thread.start();
+//		}
+
+
+	}
+
 
 }

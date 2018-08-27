@@ -66,4 +66,28 @@ public class ServiceA {
         });
 
     }
+
+    public void transfer(UserEntity user1, UserEntity user2) {
+//        UserEntity user1 = this.userDao.getOne(1);
+//        UserEntity user2 = this.userDao.getOne(2);
+
+        UserEntity firstUser = user1.getId() < user2.getId() ? user1: user2;
+        UserEntity secondUser = user1.getId() > user2.getId() ? user1: user2;
+
+//        UserEntity firstUser = user1;
+//        UserEntity secondUser = user2;
+
+        synchronized (firstUser) {
+            System.out.println("sync " + firstUser.getId());
+            synchronized (secondUser) {
+                System.out.println("sync " + secondUser.getId());
+                user1.setScore(user1.getScore() + 1);
+                user2.setScore(user2.getScore() - 1);
+            }
+        }
+
+
+//        this.userDao.save(user1);
+//        this.userDao.save(user2);
+    }
 }
