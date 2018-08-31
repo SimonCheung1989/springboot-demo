@@ -1,17 +1,29 @@
 package com.simon.demo.commondemo;
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
+import com.simon.demo.commondemo.akka.MasterActor;
+import com.simon.demo.commondemo.akka.WorkerActor;
 import com.simon.demo.commondemo.component.ServiceA;
+import com.simon.demo.commondemo.dao.db1.DBHandler;
 import com.simon.demo.commondemo.dao.db1.UserDao;
 import com.simon.demo.commondemo.dao.db2.BlogDao;
 import com.simon.demo.commondemo.entities.db2.BlogEntity;
 import com.simon.demo.commondemo.entities.db1.UserEntity;
+import com.simon.demo.commondemo.model.Notification;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -110,8 +122,108 @@ public class CommonDemoApplicationTests {
 //			thread.start();
 //		}
 
+	}
+
+	@Test
+	public void testAsync(){
+		for(int i=0; i<10000; i++) {
+			int number = i;
+			Thread thread = new Thread(() -> {
+				serviceA.saveAndSendNotification(number);
+			});
+			try {
+				Thread.sleep(200);
+			} catch (Exception e) {
+
+			}
+			thread.start();
+		}
+
+//		for(int i=0; i<10000; i++) {
+//			Thread thread = new Thread(() -> {
+//				serviceA.transfer(user2, user1);
+//				System.out.println("User1.score=" + user1.getScore() +", Total=" + (user1.getScore() + user2.getScore()));
+//			});
+//			thread.start();
+//		}
 
 	}
 
+	@Test
+	public void testTransferWithAkka() {
+		ActorSystem actorSystem = ActorSystem.create("actorSystem");
+		System.out.println(actorSystem.settings());
+		ActorRef workerActor = actorSystem.actorOf(Props.create(WorkerActor.class), "WorkerActor");
+		ActorRef masterActor = actorSystem.actorOf(Props.create(MasterActor.class, workerActor), "MasterActor");
+
+		for(int i=0; i<100; i++) {
+			Notification notification = new Notification();
+			notification.setMailbox("simon" + i + "@mail.com");
+			notification.setUserId("Simon" + i);
+			masterActor.tell(notification, ActorRef.noSender());
+		}
+		System.out.println("---end---");
+		System.out.println("Enter to exist");
+		try{
+			System.in.read();
+		} catch (Exception e) {
+		} finally {
+			actorSystem.terminate();
+		}
+
+	}
+
+	@Test
+	public void testFormat(){
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		System.out.println(format.format(new Date()));
+	}
+
+	@Test
+	public void testCount() throws Exception{
+		CountDownLatch countDownLatch = new CountDownLatch(10000);
+		final int[] total = {0};
+		for(int i=0; i<10000; i++) {
+			Thread thread = new Thread(() -> {
+				try {
+					Thread.sleep(100);
+				}catch (Exception e) {
+
+				}
+				total[0]++;
+
+				countDownLatch.countDown();
+			});
+			thread.start();
+
+		}
+		countDownLatch.await();
+		System.out.println(total[0]);
+
+	}
+
+	@Autowired
+	DBHandler dbHandler;
+
+	@Test
+	public void testDBHandler() {
+
+		String sort = "+displayName";
+
+		int sortValue = "+displayName".equalsIgnoreCase(sort) ? 1 : ("-displayName".equalsIgnoreCase(sort) ? -1 : 0);
+
+		System.out.println("------asc-----");
+		dbHandler.queryUserEntity("Simon", sortValue).stream().forEach(entity -> {
+			System.out.println(entity.getName());
+		});
+
+
+		sort = "-displayName";
+		sortValue = "+displayName".equalsIgnoreCase(sort) ? 1 : ("-displayName".equalsIgnoreCase(sort) ? -1 : 0);
+		System.out.println("------desc-----");
+		dbHandler.queryUserEntity("Simon", sortValue).stream().forEach(entity -> {
+			System.out.println(entity.getName());
+		});
+	}
 
 }

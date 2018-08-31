@@ -6,6 +6,7 @@ import com.simon.demo.commondemo.entities.db1.UserEntity;
 import com.simon.demo.commondemo.entities.db2.BlogEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -24,4 +25,13 @@ public class ServiceB {
         this.userDao.save(userEntity);
     }
 
+    @Async
+    public void sendNotification(Integer number){
+        try {
+            Thread.sleep(10000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Success: " + number);
+    }
 }
