@@ -24,12 +24,4 @@ public class WebDemoApplicationTests {
 		logger.error("This is log {}", "HHH");
 	}
 
-	@Test
-	public void testException() {
-		try {
-			String str = "";
-		} catch (Exception e) {
-			System.out.println(str);
-		}
-	}
 }
