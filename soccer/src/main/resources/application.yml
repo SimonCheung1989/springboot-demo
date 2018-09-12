@@ -1,0 +1,8 @@
+football:
+  url: http://op.juhe.cn/onebox/football
+  key: c5f2c39ede61d9b0894adca5783b5cf8
+
+logging:
+  level:
+    root: debug
+

@@ -1,0 +1,151 @@
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Soccer
+  description: description
+  termsOfService: terms
+  contact:
+    name: Simon
+    url: http://148.70.109.211:81/
+    email: 243120877@qq.com
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+paths:
+  /league:
+    get:
+      summary: get league info
+      description: get league info
+      parameters:
+      - name: league
+        in: query
+        required: true
+        type: string
+      - name: dtype
+        in: query
+        required: false
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/SaiChengDTO'
+
+definitions:
+  SaiChengDTO:
+    type: object
+    title: SaiChengDTO
+    properties:
+      reason:
+        type: string
+      result:
+        type: object
+        properties:
+          key:
+            type: string
+          tabs:
+            type: object
+            properties:
+              saicheng1:
+                type: string
+              saicheng2:
+                type: string
+              saicheng3:
+                type: string
+              jifenbang:
+                type: string
+              sheshoubang:
+                type: string
+          views:
+            type: object
+            properties:
+              saicheng1:
+                type: array
+                items:
+                  $ref: '#/definitions/SaiChengItem'
+              saicheng2:
+                type: array
+                items:
+                  $ref: '#/definitions/SaiChengItem'
+              saicheng3:
+                type: array
+                items:
+                  $ref: '#/definitions/SaiChengItem'
+              jifenbang:
+                type: array
+                items:
+                  $ref: '#/definitions/JiFenBangItem'
+              sheshoubang:
+                type: array
+                items:
+                  $ref: '#/definitions/SheShouBangItem'
+      error_code:
+        type: integer
+  SaiChengItem:
+    type: object
+    properties:
+      c1:
+        type: string
+      c2:
+        type: string
+      c3:
+        type: string
+      c4R:
+        type: string
+      c4T1:
+        type: string
+      c4T1URL:
+        type: string
+      c4T2:
+        type: string
+      c4T2URL:
+        type: string
+      c51:
+        type: string
+      c51Link:
+        type: string
+      c52:
+        type: string
+      c52Link:
+        type: string
+  JiFenBangItem:
+    type: object
+    properties:
+      c1:
+        type: string
+      c2:
+        type: string
+      c2L:
+        type: string
+      c3:
+        type: string
+      c41:
+        type: string
+      c42:
+        type: string
+      c43:
+        type: string
+      c5:
+        type: string
+      c6:
+        type: string
+  SheShouBangItem:
+    type: object
+    properties:
+      c1:
+        type: string
+      c2:
+        type: string
+      c2L:
+        type: string
+      c3:
+        type: string
+      c3L:
+        type: string
+      c4:
+        type: string
+      c5:
+        type: string
+
+
+
