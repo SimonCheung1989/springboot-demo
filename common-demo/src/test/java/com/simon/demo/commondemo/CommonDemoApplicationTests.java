@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import org.apache.fop.apps.Fop;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -314,7 +315,6 @@ public class CommonDemoApplicationTests {
 	
 	@Test
 	public void testFop() throws Exception {
-		
 	}
 
 }
