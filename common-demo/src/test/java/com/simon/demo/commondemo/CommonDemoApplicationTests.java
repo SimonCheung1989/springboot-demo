@@ -5,7 +5,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.fop.apps.Fop;
@@ -32,6 +34,8 @@ import com.simon.demo.commondemo.dao.db1.UserDao;
 import com.simon.demo.commondemo.dao.db2.BlogDao;
 import com.simon.demo.commondemo.entities.db1.UserEntity;
 import com.simon.demo.commondemo.entities.db2.BlogEntity;
+import com.simon.demo.commondemo.freemarker.PdfHelper;
+import com.simon.demo.commondemo.freemarker.PdfUtils;
 import com.simon.demo.commondemo.model.Notification;
 
 import akka.actor.ActorRef;
@@ -315,6 +319,24 @@ public class CommonDemoApplicationTests {
 	
 	@Test
 	public void testFop() throws Exception {
+	}
+	
+	@Test
+	public void testFreemarker() throws Exception {
+		try {
+	        Map<Object, Object> o=new HashMap<Object, Object>();
+	        //存入一个集合
+	        List<String> list = new ArrayList<String>();
+	        list.add("小明");
+	        list.add("张三");
+	        list.add("李四");
+	        o.put("name", "http://www.xdemo.org/");
+	        o.put("nameList", list);
+	        String path=PdfHelper.getPath();
+	        PdfUtils.generateToFile(path, "/pdf/tpl.ftl", path + "/pdf/", o, path + "/xdemo.pdf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
