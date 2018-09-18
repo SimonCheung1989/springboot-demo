@@ -1,12 +1,12 @@
 package com.simon.demo.commondemo.config;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -17,32 +17,35 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@ConfigurationProperties(prefix = "db2.spring.datasource")
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef = "entityManagerFactory2",
-        transactionManagerRef = "transactionManager2",
-        basePackages = { "com.simon.demo.commondemo.dao.db2" }
+        entityManagerFactoryRef = "entityManagerFactory1",
+        transactionManagerRef = "transactionManager1",
+        basePackages = { "com.simon.demo.commondemo.dao.db1" }
 )
-public class DB2Config extends HikariConfig {
+public class DB1Config {
 
-    @Bean(name = "dataSource2")
+	@Primary
+    @Bean(name = "dataSource1")
+    @ConfigurationProperties(prefix = "db1.spring.datasource")
     public DataSource dataSource() {
-        return new HikariDataSource(this);
+    	return DataSourceBuilder.create().build();
 
     }
 
-    @Bean(name = "entityManagerFactory2")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("dataSource2") final DataSource dataSource) {
+	@Primary
+    @Bean(name = "entityManagerFactory1")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("dataSource1") final DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean lef = new LocalContainerEntityManagerFactoryBean();
         lef.setDataSource(dataSource);
         lef.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        lef.setPackagesToScan("com.simon.demo.commondemo.entities.db2");
+        lef.setPackagesToScan("com.simon.demo.commondemo.entities.db1");
         return lef;
     }
 
-    @Bean(name = "transactionManager2")
-    public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory2") final EntityManagerFactory entityManagerFactory) {
+	@Primary
+    @Bean(name = "transactionManager1")
+    public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory1") final EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 

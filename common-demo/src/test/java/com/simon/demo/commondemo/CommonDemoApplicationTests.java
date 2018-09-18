@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
+import javax.sound.midi.Soundbank;
+
 import org.apache.fop.apps.Fop;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -18,6 +20,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.bouncycastle.jce.provider.JDKDSASigner.ecDSA;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -34,6 +37,7 @@ import com.simon.demo.commondemo.dao.db1.UserDao;
 import com.simon.demo.commondemo.dao.db2.BlogDao;
 import com.simon.demo.commondemo.entities.db1.UserEntity;
 import com.simon.demo.commondemo.entities.db2.BlogEntity;
+import com.simon.demo.commondemo.entities.db2.UserEntity2;
 import com.simon.demo.commondemo.freemarker.PdfHelper;
 import com.simon.demo.commondemo.freemarker.PdfUtils;
 import com.simon.demo.commondemo.model.Notification;
@@ -50,6 +54,9 @@ public class CommonDemoApplicationTests {
 
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	com.simon.demo.commondemo.dao.db2.UserDao2 userDao2;
 
 	@Autowired
 	BlogDao blogDao;
@@ -71,6 +78,25 @@ public class CommonDemoApplicationTests {
 			userEntity.setName("Simon" + i);
 			userDao.saveAndFlush(userEntity);
 			Thread.sleep(100);
+		}
+
+	}
+	
+	@Test
+	public void testUserDao2() throws Exception {
+
+		try {
+	//		userEntity.setId(1);
+			for (int i = 0; i < 100; i++) {
+				UserEntity2 userEntity = new UserEntity2();
+				System.out.println(i);
+				userEntity.setName("Datasource2" + i);
+				userDao2.save(userEntity);
+				Thread.sleep(100);
+			}
+			userDao2.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -115,33 +141,6 @@ public class CommonDemoApplicationTests {
 		blogEntity.setTitle("Transactional6");
 
 		this.serviceA.insertWithManualTransactional(userEntity, blogEntity);
-	}
-
-	@Test
-	public void testTransfer() {
-		UserEntity user1 = this.userDao.findById(1).get();
-		UserEntity user2 = this.userDao.findById(2).get();
-		System.out.println(user1.getName());
-		System.out.println(user2.getName());
-
-		for (int i = 0; i < 100; i++) {
-			Thread thread = new Thread(() -> {
-				serviceA.transfer(user1, user2);
-				serviceA.transfer(user2, user1);
-				System.out.println(
-						"User1.score=" + user1.getScore() + ", Total=" + (user1.getScore() + user2.getScore()));
-			});
-			thread.start();
-		}
-
-//		for(int i=0; i<10000; i++) {
-//			Thread thread = new Thread(() -> {
-//				serviceA.transfer(user2, user1);
-//				System.out.println("User1.score=" + user1.getScore() +", Total=" + (user1.getScore() + user2.getScore()));
-//			});
-//			thread.start();
-//		}
-
 	}
 
 	@Test
@@ -334,6 +333,16 @@ public class CommonDemoApplicationTests {
 	        o.put("nameList", list);
 	        String path=PdfHelper.getPath();
 	        PdfUtils.generateToFile(path, "/pdf/tpl.ftl", path + "/pdf/", o, path + "/xdemo.pdf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testMultipleDB() {
+		try {
+			UserEntity2 userEntity2 = userDao2.getOne(1);
+			System.out.println(userEntity2.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

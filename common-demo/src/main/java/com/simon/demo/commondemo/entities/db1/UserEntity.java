@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class UserEntity {
     private Integer id;
     private String name;
-    private Integer score;
+//    private Integer score;
 
     @Id
     @Column(name = "ID")
@@ -28,13 +28,13 @@ public class UserEntity {
     public void setName(String name) {
         this.name = name;
     }
-
-    @Column(name = "SCORE")
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
+//
+//    @Column(name = "SCORE")
+//    public Integer getScore() {
+//        return score;
+//    }
+//
+//    public void setScore(Integer score) {
+//        this.score = score;
+//    }
 }
