@@ -1,6 +1,8 @@
 package com.simon.demo.commondemo;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import javax.sound.midi.Soundbank;
+import javax.sql.DataSource;
 
 import org.apache.fop.apps.Fop;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -26,7 +29,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.simon.demo.commondemo.akka.MasterActor;
@@ -48,6 +53,7 @@ import akka.actor.Props;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class CommonDemoApplicationTests {
 	@Autowired
 	ServiceA serviceA;
@@ -340,12 +346,42 @@ public class CommonDemoApplicationTests {
 	
 	@Test
 	public void testMultipleDB() {
+		int i = 1;
+		while (true) {
+			try {
+				UserEntity2 userEntity2 = userDao2.findOne(1);
+				System.out.println("Time: " +(++i) + ", " + userEntity2.getName());
+				Thread.sleep(1000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Autowired
+	@Qualifier("dataSource1") 
+	private DataSource dataSource1;
+	
+	@Autowired
+	@Qualifier("dataSource2") 
+	private DataSource dataSource2;
+	
+	
+	@Test
+	public void testDBPool() {
 		try {
-			UserEntity2 userEntity2 = userDao2.getOne(1);
-			System.out.println(userEntity2.getName());
-		} catch (Exception e) {
+			int i = 0;
+			while (true) {
+				Connection connection = dataSource2.getConnection();
+				System.out.println("Connection: " + (i++) + ", " + connection.isClosed());
+				System.out.println(dataSource1);
+				System.out.println(dataSource2);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 }
