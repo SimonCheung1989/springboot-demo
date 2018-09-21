@@ -1,6 +1,8 @@
 package com.simon.demo.commondemo;
 
 import java.io.File;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -46,10 +48,13 @@ import com.simon.demo.commondemo.entities.db2.UserEntity2;
 import com.simon.demo.commondemo.freemarker.PdfHelper;
 import com.simon.demo.commondemo.freemarker.PdfUtils;
 import com.simon.demo.commondemo.model.Notification;
+import com.simon.demo.commondemo.utils.MyHelper;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -383,5 +388,40 @@ public class CommonDemoApplicationTests {
 		}
 		
 	}
+	
+	@Test
+	public void testFreemarker2() throws Exception {
+		Configuration cfg = new Configuration(Configuration.VERSION_2_3_26);
+		String classPath = this.getClass().getResource("/").getPath();
+		System.out.println(classPath);
+		cfg.setDirectoryForTemplateLoading(new File(classPath + "/templates"));
+		
+		Map<String, Object> root = new HashMap<>();
+		root.put("name", "Simon");
+		
+		Template temp = cfg.getTemplate("test.ftl");
+		
+		Writer out = new OutputStreamWriter(System.out);
+		temp.process(root, out);
+
+	}
+	
+	@Test
+	public void testMyHelper() {
+		System.out.println(MyHelper.NotificationType.CASHOUT);
+		
+		MyHelper.NotificationType type = MyHelper.NotificationType.CASHOUT;
+		
+		switch (type) {
+		case CASHOUT:
+			System.out.println("Cashout");
+			break;
+		default:
+			System.out.println("This is default value");
+			break;
+		}
+		
+	}
+	
 
 }
