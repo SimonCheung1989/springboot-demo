@@ -1,7 +1,10 @@
 package com.simon.demo.commondemo;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -35,7 +38,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.xhtmlrenderer.pdf.ITextFontResolver;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import com.lowagie.text.pdf.BaseFont;
 import com.simon.demo.commondemo.akka.MasterActor;
 import com.simon.demo.commondemo.akka.WorkerActor;
 import com.simon.demo.commondemo.component.ServiceA;
@@ -55,6 +61,7 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import scala.compat.java8.MakesParallelStream;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -398,12 +405,102 @@ public class CommonDemoApplicationTests {
 		
 		Map<String, Object> root = new HashMap<>();
 		root.put("name", "Simon");
+		root.put("sayHello", false);
+		root.put("id", 1234);
+		List<Map<String, Object>> list = new ArrayList<>();
+		for(int i=0; i<10; i++) {
+			Map map = new HashMap<>();
+			map.put("name", "Simon:" + i);
+			list.add(map);
+		}
+		root.put("list", list);
 		
 		Template temp = cfg.getTemplate("test.ftl");
 		
 		Writer out = new OutputStreamWriter(System.out);
 		temp.process(root, out);
 
+	}
+	
+	private String generateHtml(String templateName, Map root) {
+		String result = "";
+		try {
+			Configuration cfg = new Configuration(Configuration.VERSION_2_3_26);
+			String classPath = this.getClass().getResource("/").getPath();
+			cfg.setDirectoryForTemplateLoading(new File(classPath + "/templates"));
+			Template temp = cfg.getTemplate(templateName);
+			StringWriter stringWriter = new StringWriter();
+			BufferedWriter bufferedWriter = new BufferedWriter(stringWriter);
+			temp.process(root, bufferedWriter);
+			bufferedWriter.flush();
+			bufferedWriter.close();
+			result = stringWriter.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@Test
+	public void testPdf() throws Exception {
+		try {
+			String classPath = this.getClass().getResource("/").getPath();
+			Map root = new HashMap<>();
+			root.put("title", "PDF v1");
+			ITextRenderer renderer = new ITextRenderer();
+			System.out.println(this.generateHtml("pdf.ftl", root));
+			renderer.setDocumentFromString(this.generateHtml("pdf.ftl", root));
+			ITextFontResolver fontResolver = renderer.getFontResolver();
+			fontResolver.addFont(classPath + "/font/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+			fontResolver.addFont(classPath + "/font/arialuni.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+			fontResolver.addFont(classPath + "/font/Arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+			
+			renderer.layout();
+			FileOutputStream fileOutputStream = new FileOutputStream(new File(classPath + "/pdf/pdf.pdf"));
+			System.out.println(classPath + "/pdf/pdf.pdf");
+			renderer.createPDF(fileOutputStream);
+			renderer.finishPDF();
+			
+			fileOutputStream.flush();
+			fileOutputStream.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testPdf2() throws Exception {
+		Map<String, Object> root = new HashMap<String, Object>();
+		
+		String classPath = this.getClass().getResource("/").getPath();
+		System.out.println(classPath);
+		
+		root.put("staticPath", classPath + "/static");
+		root.put("uniqueNumber","SullanFang");
+		root.put("businessName","简体繁體businessName");
+		root.put("signUpTime", new Date().toString());
+		root.put("accountNumber", "54645355345464");
+		root.put("business", "Sample Business");
+		root.put("publicImageLink", "https://sacctcihkpeakng.blob.core.windows.net/public-web-content/public-web-content/onboarding/images");
+		root.put("termAndConditionLink", "https://payme.hsbc.com.hk/");
+		root.put("contactUsLink", "https://payme.hsbc.com.hk/");
+		
+		ITextRenderer renderer = new ITextRenderer();
+		System.out.println(this.generateHtml("notification.ftl", root));
+		renderer.setDocumentFromString(this.generateHtml("notification.ftl", root));
+		ITextFontResolver fontResolver = renderer.getFontResolver();
+		fontResolver.addFont(classPath + "/font/arialuni.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+		fontResolver.addFont(classPath + "/font/simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+		
+		renderer.layout();
+		FileOutputStream fileOutputStream = new FileOutputStream(new File(classPath + "/pdf/Notification.pdf"));
+		System.out.println(classPath + "/pdf/Notification.pdf");
+		renderer.createPDF(fileOutputStream);
+		renderer.finishPDF();
+		
+		fileOutputStream.flush();
+		fileOutputStream.close();
 	}
 	
 	@Test
