@@ -7,6 +7,8 @@
     body {
         font-family: Arial Unicode MS;
     }
+    
+    
 </style>
 </head>
 <body>
@@ -17,5 +19,14 @@
 <#list 1..10 as i>
 <h1>Hello 你好 妳好 ${i}</h1>
 </#list>
+
+<div align="left" style="color: #111111; font-size: 14px; font-family: 'Arial Unicode MS'; line-height: 29px;" class="content-holder">
+	Your sign up details with us are as follows:
+	<ul>
+		<li>Business name registered with PayMe for Business: ${business}</li>
+		<li>Account number: ${accountNumber}</li>
+		<li>Sign up time: ${signUpTime}</li>
+	</ul>
+</div>
 </body>
 </html>
