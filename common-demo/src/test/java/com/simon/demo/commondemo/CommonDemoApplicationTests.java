@@ -1,18 +1,11 @@
 package com.simon.demo.commondemo;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -21,17 +14,14 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import javax.sound.midi.Soundbank;
 import javax.sql.DataSource;
 
-import org.apache.fop.apps.Fop;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -39,7 +29,6 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.bouncycastle.jce.provider.JDKDSASigner.ecDSA;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -73,7 +62,6 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import scala.compat.java8.MakesParallelStream;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -102,7 +90,7 @@ public class CommonDemoApplicationTests {
 	public void testUserDao() throws Exception {
 
 //		userEntity.setId(1);
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			UserEntity userEntity = new UserEntity();
 			System.out.println(i);
 			userEntity.setName("Simon" + i);
@@ -117,7 +105,7 @@ public class CommonDemoApplicationTests {
 
 		try {
 	//		userEntity.setId(1);
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 10; i++) {
 				UserEntity2 userEntity = new UserEntity2();
 				System.out.println(i);
 				userEntity.setName("Datasource2" + i);
@@ -153,7 +141,7 @@ public class CommonDemoApplicationTests {
 		System.out.println(total);
 	}
 
-	@Test
+	@Test(expected = NullPointerException.class)
 	public void testTransactional() {
 		UserEntity userEntity = new UserEntity();
 		userEntity.setName("Transactional4");
@@ -175,7 +163,7 @@ public class CommonDemoApplicationTests {
 
 	@Test
 	public void testAsync() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			int number = i;
 			Thread thread = new Thread(() -> {
 				serviceA.saveAndSendNotification(number);
@@ -205,7 +193,7 @@ public class CommonDemoApplicationTests {
 		ActorRef workerActor = actorSystem.actorOf(Props.create(WorkerActor.class), "WorkerActor");
 		ActorRef masterActor = actorSystem.actorOf(Props.create(MasterActor.class, workerActor), "MasterActor");
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			Notification notification = new Notification();
 			notification.setMailbox("simon" + i + "@mail.com");
 			notification.setUserId("Simon" + i);
@@ -230,9 +218,9 @@ public class CommonDemoApplicationTests {
 
 	@Test
 	public void testCount() throws Exception {
-		CountDownLatch countDownLatch = new CountDownLatch(100);
+		CountDownLatch countDownLatch = new CountDownLatch(10);
 		final int[] total = { 0 };
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			Thread thread = new Thread(() -> {
 				try {
 					Thread.sleep(100);
@@ -292,58 +280,71 @@ public class CommonDemoApplicationTests {
 
 	@Test
 	public void testWritePdf() throws Exception {
-		String classPath = this.getClass().getResource("/").getPath();
-		System.out.println(classPath);
-		File file = new File(classPath + "/test.pdf");
-		if (!file.exists()) {
-			file.createNewFile();
+		try {
+			String classPath = this.getClass().getResource("/").getPath();
+			System.out.println(classPath);
+			File file = new File(classPath + "/test.pdf");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			System.out.println(file.exists());
+			PDDocument document = PDDocument.load(file);
+			PDPage page = new PDPage();
+			document.addPage(page);
+			PDFont font = PDType1Font.HELVETICA_BOLD;
+			PDPageContentStream contentStream = new PDPageContentStream(document, page);
+			contentStream.beginText();
+			contentStream.setFont(font, 20);
+			contentStream.showText("You are overwriting an existing content, you should use the append mode. You are overwriting an existing content, you should use the append mode. You are overwriting an existing content, you should use the append mode. You are overwriting an existing content, you should use the append mode. You are overwriting an existing content, you should use the append mode.");
+			contentStream.endText();
+			contentStream.close();
+			document.save(file);
+			document.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		System.out.println(file.exists());
-		PDDocument document = PDDocument.load(file);
-		PDPage page = new PDPage();
-		document.addPage(page);
-		PDFont font = PDType1Font.HELVETICA_BOLD;
-		PDPageContentStream contentStream = new PDPageContentStream(document, page);
-		contentStream.beginText();
-		contentStream.setFont(font, 20);
-		contentStream.showText("You are overwriting an existing content, you should use the append mode. You are overwriting an existing content, you should use the append mode. You are overwriting an existing content, you should use the append mode. You are overwriting an existing content, you should use the append mode. You are overwriting an existing content, you should use the append mode.");
-		contentStream.endText();
-		contentStream.close();
-		document.save(file);
-		document.close();
 	}
 	
 	@Test
-	public void testAppendPdf() throws Exception {
-		String classPath = this.getClass().getResource("/").getPath();
-		System.out.println(classPath);
-		File file = new File(classPath + "/test.pdf");
-		if (!file.exists()) {
-			file.createNewFile();
+	public void testAppendPdf() {
+		try {
+			String classPath = this.getClass().getResource("/").getPath();
+			System.out.println(classPath);
+			File file = new File(classPath + "/test.pdf");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			PDDocument document = PDDocument.load(file);
+			PDPage page = document.getPage(0);
+	//		document.addPage(page);
+			PDFont font = PDType1Font.HELVETICA_BOLD;
+			PDPageContentStream contentStream = new PDPageContentStream(document, page);
+			contentStream.beginText();
+			contentStream.setFont(font, 20);
+			contentStream.showText("Hello Pdfbox...");
+			contentStream.endText();
+			PDImageXObject image = PDImageXObject.createFromFile(classPath + "/simon.jpg", document);
+			contentStream.drawImage(image, 0, 50);
+			contentStream.close();
+			document.save(file);
+			document.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
-		PDDocument document = PDDocument.load(file);
-		PDPage page = document.getPage(0);
-//		document.addPage(page);
-		PDFont font = PDType1Font.HELVETICA_BOLD;
-		PDPageContentStream contentStream = new PDPageContentStream(document, page);
-		contentStream.beginText();
-		contentStream.setFont(font, 20);
-		contentStream.showText("Hello Pdfbox...");
-		contentStream.endText();
-		PDImageXObject image = PDImageXObject.createFromFile(classPath + "/simon.jpg", document);
-		contentStream.drawImage(image, 0, 50);
-		contentStream.close();
-		document.save(file);
-		document.close();
 	}
 
 	@Test
-	public void testReadPdf() throws Exception {
+	public void testReadPdf() {
+		try {
 		String classPath = this.getClass().getResource("/").getPath();
 		File file = new File(classPath + "/test.pdf");
 		PDDocument document = PDDocument.load(file);
 		PDFTextStripper textStripper = new PDFTextStripper();
 		System.out.println(textStripper.getText(document));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test
@@ -371,11 +372,11 @@ public class CommonDemoApplicationTests {
 	@Test
 	public void testMultipleDB() {
 		int i = 1;
-		while (true) {
+		while (i<10) {
 			try {
 				UserEntity2 userEntity2 = userDao2.findOne(1);
-				System.out.println("Time: " +(++i) + ", " + userEntity2.getName());
-				Thread.sleep(1000);
+				System.out.println("Time: " +(i++) + ", " + userEntity2.getName());
+				Thread.sleep(	0);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -395,7 +396,7 @@ public class CommonDemoApplicationTests {
 	public void testDBPool() {
 		try {
 			int i = 0;
-			while (true) {
+			while (i<10) {
 				Connection connection = dataSource2.getConnection();
 				System.out.println("Connection: " + (i++) + ", " + connection.isClosed());
 				System.out.println(dataSource1);

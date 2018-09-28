@@ -61,7 +61,6 @@ public class ServiceA {
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
                 serviceB.insertUserEntity(userEntity);
                 blogDao.save(blogEntity);
-                System.out.println(1/0);
             }
         });
 
