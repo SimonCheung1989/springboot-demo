@@ -3,17 +3,13 @@ package com.simon.demo.commondemo.freemarker;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
- 
+
 import javax.servlet.http.HttpServletResponse;
- 
+
 import org.xhtmlrenderer.pdf.ITextRenderer;
- 
+
 import com.lowagie.text.DocumentException;
- 
+
 import freemarker.core.ParseException;
 import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.TemplateException;
