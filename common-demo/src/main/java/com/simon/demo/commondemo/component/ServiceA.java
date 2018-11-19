@@ -1,9 +1,7 @@
 package com.simon.demo.commondemo.component;
 
-import com.simon.demo.commondemo.dao.db1.UserDao;
-import com.simon.demo.commondemo.dao.db2.BlogDao;
-import com.simon.demo.commondemo.entities.db1.UserEntity;
-import com.simon.demo.commondemo.entities.db2.BlogEntity;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,7 +9,10 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.transaction.Transactional;
+import com.simon.demo.commondemo.dao.db1.UserDao;
+import com.simon.demo.commondemo.dao.db2.BlogDao;
+import com.simon.demo.commondemo.entities.db1.UserEntity;
+import com.simon.demo.commondemo.entities.db2.BlogEntity;
 
 @Component
 public class ServiceA {
@@ -60,7 +61,6 @@ public class ServiceA {
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
                 serviceB.insertUserEntity(userEntity);
                 blogDao.save(blogEntity);
-                System.out.println(1/0);
             }
         });
 
@@ -76,14 +76,14 @@ public class ServiceA {
 //        UserEntity firstUser = user1;
 //        UserEntity secondUser = user2;
 
-        synchronized (firstUser) {
-            System.out.println("sync " + firstUser.getId());
-            synchronized (secondUser) {
-                System.out.println("sync " + secondUser.getId());
-                user1.setScore(user1.getScore() + 1);
-                user2.setScore(user2.getScore() - 1);
-            }
-        }
+//        synchronized (firstUser) {
+//            System.out.println("sync " + firstUser.getId());
+//            synchronized (secondUser) {
+//                System.out.println("sync " + secondUser.getId());
+//                user1.setScore(user1.getScore() + 1);
+//                user2.setScore(user2.getScore() - 1);
+//            }
+//        }
 
 
 //        this.userDao.save(user1);
